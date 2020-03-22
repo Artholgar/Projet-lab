@@ -1,9 +1,25 @@
+/*Auteurs       : Guillaume MULIER, Arthur PAIRAUD
+ *Création      : 24-02-2020
+ *Modifications : 24-02-2020
+ *                28-02-2020
+ *                29-02-2020
+ *                01-03-2020
+ *                08-03-2020
+ *                14-03-2020
+ *                15-03-2020
+ *                16-03-2020
+ *                19-03-2020
+ *                20-03-2020
+ *                21-03-2020
+ *                22-03-2020
+ */
+
 #include <stdlib.h>
 #include <stdio.h>
 
 #include "../include/Mur.h"
 
-int alloue_lst_mur(Liste_Mur * lst, int coord_y, int coord_x, int mur){
+int alloue_lst_mur(Liste_Mur * lst, int coord_y, int coord_x){
 
     if((*lst = (Cellule_Mur *)malloc(sizeof(Cellule_Mur))) == NULL)
         return 0;
@@ -24,13 +40,13 @@ int init_liste_murs(Laby_t lab, Liste_Mur * lst_mur_est, Liste_Mur * lst_mur_sud
         for(i = 0; i < lab.taille.x; i++){
             if(j == 0 && i == 0){
                 if(lab.taille.x > 1){
-                    if(alloue_lst_mur(lst_mur_est, 0, 0, lab.cases[0][0].murEst) == 0)
+                    if(alloue_lst_mur(lst_mur_est, 0, 0) == 0)
                         return 0;
                     *nb_mur_est += 1;
                 }
                 
                 if(lab.taille.y > 1){
-                    if(alloue_lst_mur(lst_mur_sud, 0, 0, lab.cases[0][0].murSud) == 0)
+                    if(alloue_lst_mur(lst_mur_sud, 0, 0) == 0)
                         return 0;
                     *nb_mur_sud += 1;
                 }
@@ -39,13 +55,13 @@ int init_liste_murs(Laby_t lab, Liste_Mur * lst_mur_est, Liste_Mur * lst_mur_sud
                 ptr_mur_sud = *lst_mur_sud;
             }else{
                 if(i < lab.taille.x - 1){
-                    if(alloue_lst_mur(&(ptr_mur_est->suivant), j, i, lab.cases[j][i].murEst) == 0)
+                    if(alloue_lst_mur(&(ptr_mur_est->suivant), j, i) == 0)
                         return 0;
                     *nb_mur_est += 1;
                     ptr_mur_est = ptr_mur_est->suivant;
                 }
                 if(j < lab.taille.y - 1){
-                    if(alloue_lst_mur((&ptr_mur_sud->suivant), j, i, lab.cases[j][i].murSud) == 0)
+                    if(alloue_lst_mur((&ptr_mur_sud->suivant), j, i) == 0)
                         return 0;
                     *nb_mur_sud += 1;
                     ptr_mur_sud = ptr_mur_sud->suivant;

@@ -1,3 +1,19 @@
+/*Auteurs       : Guillaume MULIER, Arthur PAIRAUD
+ *Création      : 24-02-2020
+ *Modifications : 24-02-2020
+ *                28-02-2020
+ *                29-02-2020
+ *                01-03-2020
+ *                08-03-2020
+ *                14-03-2020
+ *                15-03-2020
+ *                16-03-2020
+ *                19-03-2020
+ *                20-03-2020
+ *                21-03-2020
+ *                22-03-2020
+ */
+
 #define _XOPEN_SOURCE   600  /*pour enlever le warning de usleep*/
 
 #include <stdio.h>
@@ -21,8 +37,6 @@ int main(int argc, char ** argv){
     File_Att fil, vic;
 
     /*Initialisation des parametres*/
-    lst_mur_est = NULL;
-    lst_mur_sud = NULL;
     mode = 0;
     graine = time(NULL);
     attente = -1;
@@ -34,12 +48,11 @@ int main(int argc, char ** argv){
     fenetre_x = 500;
     mur = 0;
     victor = 0;
-    fil = NULL;
-    vic = NULL;
 
     /*Modification des parametres, en fonction des arguments donnés au programme*/
     for(i = 1; i < argc; i++){
         if(strncmp(argv[i], "--mode=", 7) == 0){   
+            /*mode = 0 pour l'affichage graphique, 1 pour l'affichage ascii et 2 pour l'affichage utf8*/
             if(strcmp(argv[i] + 7, "texte") == 0){
                 mode = 1;
             }else if(strcmp(argv[i] + 7, "utf8") == 0){
@@ -67,6 +80,7 @@ int main(int argc, char ** argv){
                 exit(EXIT_FAILURE);
             }
         }else if(strncmp(argv[i], "--fenetre=", 10) == 0){   
+            /*Taille de la fenetre en pixels, pour l'affichage graphique*/
             if((fenetre_y = atoi(argv[i] + 10)) > 0){
                 j = 0;
                 while(argv[i][j] != 'x'){
@@ -99,6 +113,7 @@ int main(int argc, char ** argv){
         }else if(strcmp(argv[i], "--acces") == 0){
             acces = 1;
         }else if(strcmp(argv[i], "--mur") == 0){
+            /*Option pour utiliser la structure Liste_Mur*/
             mur = 1;
         }else if(strcmp(argv[i], "--victor") == 0){   
             victor = 1;
@@ -109,15 +124,22 @@ int main(int argc, char ** argv){
 
     }
 
+    lst_mur_est = NULL;
+    lst_mur_sud = NULL;
+
+    fil = NULL;
+    vic = NULL;
+
     srand(graine);
     nb_fusions = 0;
     nb_mur_est = 0;
     nb_mur_sud = 0;
 
-    /*Initialisation de la liste chainée contenant les murs (une liste pour les murs sud et une liste pour les murs est)*/
+    /*Initialisation du labyrinthe*/
     if(Initialisation(&lab, taille_y, taille_x) == 0)
         exit(EXIT_FAILURE);   
 
+    /*Initialisation de la liste chainée contenant les murs (une liste pour les murs sud et une liste pour les murs est)*/
     if(init_liste_murs(lab, &lst_mur_est, &lst_mur_sud, &nb_mur_est, &nb_mur_sud) == 0)
         exit(EXIT_FAILURE); 
 
@@ -125,8 +147,11 @@ int main(int argc, char ** argv){
         MLV_create_window("Laby", "", fenetre_x, fenetre_y);
     }
 
+    /*Boucle principale
+    Un tours de boucle supprime un mur*/
     do{
         if(attente == 0){
+            /*Si on veut directement la labyrinthe fini, on affiche uniquement apres que le labyrinthe soit fini*/
     
             if(mur == 0){
                 
@@ -173,6 +198,7 @@ int main(int argc, char ** argv){
 
     }while(test_vic_un.x != test_vic_deux.x || test_vic_un.y != test_vic_deux.y || (acces && nb_fusions != (lab.taille.y * lab.taille.x) - 1));
 
+    /*On affiche une dernierre fois le labyrinthe fini*/
     if(mode == 0){
         MLV_clear_window(MLV_COLOR_WHITE);
         afficher_graph(lab, fenetre_y, fenetre_x);
@@ -184,6 +210,7 @@ int main(int argc, char ** argv){
         afficher_utf8(lab);
     }
 
+    /*Si on veut le labyrinthe résolu*/
     if(victor){
         ajoute_file(&fil, lab.taille.y - 1, lab.taille.x - 1);
         taille_chemin = 0;

@@ -1,3 +1,19 @@
+/*Auteurs       : Guillaume MULIER, Arthur PAIRAUD
+ *Création      : 24-02-2020
+ *Modifications : 24-02-2020
+ *                28-02-2020
+ *                29-02-2020
+ *                01-03-2020
+ *                08-03-2020
+ *                14-03-2020
+ *                15-03-2020
+ *                16-03-2020
+ *                19-03-2020
+ *                20-03-2020
+ *                21-03-2020
+ *                22-03-2020
+ */
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <assert.h>
